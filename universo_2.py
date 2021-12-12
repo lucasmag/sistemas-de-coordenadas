@@ -2,10 +2,10 @@ from math import pi
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from cubo import criar_cubo
-from paralelepipedo import criar_paralelepipedo
-from piramide import criar_piramide
-from tronco import criar_tronco
+from cubo_1a import criar_cubo
+from paralelepipedo_1b import criar_paralelepipedo
+from piramide_1c import criar_piramide
+from tronco_1d import criar_tronco
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
