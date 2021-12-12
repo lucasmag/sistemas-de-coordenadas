@@ -11,9 +11,9 @@ def criar_tronco(empurrar=(0, 0, 0)):
         [3, 0, 0],
         [3, 3, 0],
         [0.85, 0.85, 2.5],
-        [0.85, 1.7, 2.5],
-        [1.7, 0.85, 2.5],
-        [1.7, 1.7, 2.5],
+        [0.85, 2.15, 2.5],
+        [2.15, 0.85, 2.5],
+        [2.15, 2.15, 2.5],
     ])
 
     if any(empurrar):
@@ -35,6 +35,7 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
     plt.setp(ax.get_xticklabels(), rotation=45, va="bottom", ha="center")
+    plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
 
     faces_tronco, vertices = criar_tronco()
     ax.scatter3D(vertices[:, 0], vertices[:, 1], vertices[:, 2])

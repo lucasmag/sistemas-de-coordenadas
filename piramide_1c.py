@@ -29,6 +29,7 @@ def criar_piramide(rotacionar=0.0, empurrar=(0, 0, 0)):
 if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
+    plt.setp(ax.get_xticklabels(), rotation=10, va="bottom", ha="center")
     plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
 
     # pi / 4 = 45 graus

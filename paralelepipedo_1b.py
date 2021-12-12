@@ -45,6 +45,9 @@ if __name__ == '__main__':
         alpha=.25)
     )
 
+    plt.setp(ax.get_xticklabels(), rotation=30, va="bottom", ha="center")
+    plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
+
     ax.set_zlim(0, 5)
     plt.xlim([0, 5])
     plt.ylim([0, 5])
