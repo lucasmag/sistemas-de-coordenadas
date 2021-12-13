@@ -1,10 +1,14 @@
+from dataclasses import dataclass
+
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 from utils import empurrar_solido
 
 
-def criar_tronco(empurrar=(0, 0, 0)):
+
+@dataclass
+class Tronco:
     v = np.array([
         [0, 0, 0],
         [0, 3, 0],
@@ -16,10 +20,7 @@ def criar_tronco(empurrar=(0, 0, 0)):
         [2.15, 2.15, 2.5],
     ])
 
-    if any(empurrar):
-        v = empurrar_solido(v, empurrar)
-
-    pontos = [
+    faces_matplot = [
         [v[0], v[1], v[3], v[2]],
         [v[0], v[1], v[5], v[4]],
         [v[1], v[3], v[7], v[5]],
@@ -28,7 +29,41 @@ def criar_tronco(empurrar=(0, 0, 0)):
         [v[4], v[5], v[7], v[6]],
     ]
 
-    return pontos, v
+    faces_opengl = (
+        (0, 1, 3, 2),
+        (0, 1, 5, 4),
+        (1, 3, 7, 5),
+        (0, 2, 6, 4),
+        (2, 3, 7, 6),
+        (4, 5, 7, 6)
+    )
+
+    v_opengl = tuple(tuple(x) for x in v)
+
+    def buscar_faces(self, vertices):
+        novas_faces = []
+
+        for face in self.faces_opengl:
+            novas_faces.append([
+                vertices[face[0]],
+                vertices[face[1]],
+                vertices[face[2]],
+                vertices[face[3]],
+            ])
+
+        return novas_faces
+
+
+
+def criar_tronco(empurrar=(0, 0, 0)):
+    tronco = Tronco()
+    v = tronco.v
+
+    if any(empurrar):
+        v = empurrar_solido(v, empurrar)
+
+    faces = tronco.buscar_faces(v)
+    return faces, v
 
 
 if __name__ == '__main__':

@@ -1,5 +1,7 @@
 from math import pi
 from matplotlib import pyplot as plt
+from matplotlib.pyplot import savefig
+from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from cubo_1a import criar_cubo
@@ -9,6 +11,8 @@ from tronco_1d import criar_tronco
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
+ax.set_proj_type('ortho')
+
 plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
 
 

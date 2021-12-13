@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
@@ -7,7 +9,8 @@ from utils import empurrar_solido
 fig = plt.figure()
 
 
-def criar_paralelepipedo(empurrar=(0, 0, 0)):
+@dataclass
+class Paralelepipedo:
     v = np.array(
         [[0, 0, 0],
          [0, 5, 0],
@@ -18,16 +21,45 @@ def criar_paralelepipedo(empurrar=(0, 0, 0)):
          [1.5, 5, 2.5],
          [1.5, 0, 2.5]])
 
+    faces_matplot = [[v[0], v[1], v[2], v[3]],
+                     [v[0], v[1], v[5], v[4]],
+                     [v[1], v[2], v[6], v[5]],
+                     [v[2], v[3], v[7], v[6]],
+                     [v[3], v[0], v[4], v[7]],
+                     [v[4], v[5], v[6], v[7]]]
+
+    faces_opengl = (
+        (0, 1, 2, 3),
+        (0, 1, 5, 4),
+        (1, 2, 6, 5),
+        (2, 3, 7, 6),
+        (3, 0, 4, 7),
+        (4, 5, 6, 7)
+    )
+
+    v_opengl = tuple(tuple(x) for x in v)
+
+    def buscar_faces(self, vertices):
+        novas_faces = []
+
+        for face in self.faces_opengl:
+            novas_faces.append([
+                vertices[face[0]],
+                vertices[face[1]],
+                vertices[face[2]],
+                vertices[face[3]],
+            ])
+
+        return novas_faces
+
+def criar_paralelepipedo(empurrar=(0, 0, 0)):
+    para = Paralelepipedo()
+    v = para.v
+
     if any(empurrar):
         v = empurrar_solido(v, empurrar)
 
-    faces = [[v[0], v[1], v[2], v[3]],
-             [v[0], v[1], v[5], v[4]],
-             [v[1], v[2], v[6], v[5]],
-             [v[2], v[3], v[7], v[6]],
-             [v[3], v[0], v[4], v[7]],
-             [v[4], v[5], v[6], v[7]]]
-
+    faces = para.buscar_faces(v)
     return faces, v
 
 
