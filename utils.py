@@ -1,10 +1,12 @@
-from functools import reduce
-from math import cos, sin, atan2, pi, hypot
-from operator import truediv, add
+from math import cos, sin, atan2
 from statistics import mean
 from typing import List, Tuple
 
 import numpy as np
+
+
+np.seterr(divide='ignore', invalid='ignore')
+
 
 class BaseCamera:
     n: List
@@ -40,11 +42,11 @@ class BaseCamera:
     def base(self):
         return self.u[::-1], self.v, self.n
 
-    def matriz_t(self, camera):
+    def matriz_t(self, x):
         return [
-            [1, 0, 0, -camera[0]],
-            [0, 1, 0, -camera[1]],
-            [0, 0, 1, -camera[2]],
+            [1, 0, 0, -x[0]],
+            [0, 1, 0, -x[1]],
+            [0, 0, 1, -x[2]],
             [0, 0, 0, 1],
         ]
 
@@ -115,7 +117,7 @@ class Solido:
         self._vertices = np.matmul(self._vertices, novos_pontos)
 
     @property
-    def centro(self):
+    def centro(self):  # Centro de massa do sólido
         todos_os_x = [vertice[0] for vertice in self._vertices]
         todos_os_y = [vertice[1] for vertice in self._vertices]
         todos_os_z = [vertice[2] for vertice in self._vertices]
@@ -137,25 +139,29 @@ class Solido:
         return vertices_solido_na_camera
 
     def projecao_ortogonal(self, eixo):
+        # Busca média do eixo a ser achatado
         media_eixo = mean(map(lambda v: v[eixo], self._vertices))
 
+        # Aplica média em todos os vértices do eixo
         for vertice in self._vertices:
             vertice[eixo] = media_eixo
 
+        # Remove vértices duplicados
         self._vertices = [list(tupl) for tupl in {tuple(item) for item in self._vertices}]
 
+        # Ordena vértices do polígono a ser recriado em 2d
         centro = (
             sum([p[0] for p in self._vertices])/len(self._vertices),
             sum([p[2] for p in self._vertices])/len(self._vertices)
         )
-
         self._vertices.sort(key=lambda p: atan2(p[2]-centro[1], p[0]-centro[0]))
 
+        # Recria arestas
         novas_arestas = []
         for i in range(len(self._vertices)-1):
             novas_arestas.append([i, i+1])
-
         novas_arestas.append([len(self._vertices)-1, 0])
+
         self.arestas = novas_arestas
         print(self._vertices)
 

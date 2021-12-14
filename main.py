@@ -16,9 +16,9 @@ def parse():
     parser.add_argument("--tronco", "-t", action='store_true', help="Cria tronco no matplotlib")
     parser.add_argument("--mundo", "-m", action='store_true', help="Cria mundo no matplotlib")
     parser.add_argument("--camera", "-k", action='store_true', help="Cria visao de camera no pyopengl")
-    parser.add_argument("--ortogonal", "-o", action='store_true', help="Aplica visao ortogonal na visão de camera")
-    parser.add_argument("--terceira_pessoa", action='store_true', help="Mostra posicao da camera na visao de camera")
-    parser.add_argument("--so_arestas", action='store_true', help="Mostra somente arestas dos objetos na visao de camera (exceto ortogonal)")
+    parser.add_argument("--ortogonal", "-o", action='store_true', help="Aplica visao ortogonal na opção de camera")
+    parser.add_argument("--terceira_pessoa", action='store_true', help="Mostra elementos da cena na opção de camera")
+    parser.add_argument("--so_arestas", action='store_true', help="Mostra somente arestas dos objetos na opção de camera")
 
     return parser.parse_args()
 

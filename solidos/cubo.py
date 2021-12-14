@@ -60,5 +60,5 @@ def criar_cubo():
     vertices = cubo.vertices_matplot
 
     ax.scatter3D(vertices[:, 0], vertices[:, 1], vertices[:, 2])
-    ax.add_collection3d(Poly3DCollection(faces_cubo, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
+    ax.add_collection3d(Poly3DCollection(faces_cubo, facecolors='g', linewidths=1, edgecolors='r', alpha=.25))
     plt.show()

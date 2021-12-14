@@ -1,10 +1,12 @@
 from typing import Tuple
 
 import pygame as pg
-from pygame.locals import *
-
-from OpenGL.GL import *
-from OpenGL.GLU import *
+from OpenGL.GL import glBegin, glEnd
+from OpenGL.raw.GL.VERSION.GL_1_0 import GL_LINES, glVertex3fv, glEnable, glPointSize, GL_POINT_SMOOTH, GL_POINTS, \
+    glColor3d, glVertex3d, GL_QUADS, glLineWidth, glClearColor, glClear, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT
+from OpenGL.raw.GLU import gluPerspective, gluLookAt
+from pygame import DOUBLEBUF
+from pygame.constants import OPENGL
 
 from mundo import PARALELEPIPEDO, TRONCO
 from utils import ponto_medio_solidos, BaseCamera
@@ -13,6 +15,7 @@ ORIGEM = [0, 0, 0]
 CORES = [[0.2, 0.75, 0.33], [0.1, 0.4, 0.8]]  # verde e azul
 
 ligar_arestas = ((0, 1),)
+
 
 def desenhar_eixo(eixo):
     glBegin(GL_LINES)

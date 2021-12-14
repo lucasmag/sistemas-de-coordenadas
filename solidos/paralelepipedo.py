@@ -61,5 +61,5 @@ def criar_paralelepipedo():
     vertices = paralelepipedo.vertices_matplot
 
     ax.scatter3D(vertices[:, 0], vertices[:, 1], vertices[:, 2])
-    ax.add_collection3d(Poly3DCollection(faces, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
+    ax.add_collection3d(Poly3DCollection(faces, facecolors='b', linewidths=1, edgecolors='r', alpha=.25))
     plt.show()
