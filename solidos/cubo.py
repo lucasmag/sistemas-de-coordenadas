@@ -19,13 +19,28 @@ class Cubo(Solido):
         [0.75, 0.75, 1.5]
     ]
 
+    arestas = (
+        (0, 1),
+        (1, 2),
+        (2, 3),
+        (0, 3),
+        (4, 5),
+        (5, 6),
+        (6, 7),
+        (4, 7),
+        (0, 4),
+        (1, 5),
+        (2, 6),
+        (3, 7),
+    )
+
     _faces = [
         [0, 1, 2, 3],
         [0, 1, 5, 4],
         [1, 2, 6, 5],
         [2, 3, 7, 6],
         [3, 0, 4, 7],
-        [4, 5, 6, 7]
+        [4, 5, 6, 7],
     ]
 
 
@@ -37,12 +52,11 @@ if __name__ == '__main__':
     #ax.set_proj_type('ortho')
 
     cubo = Cubo()
-    faces_cubo =cubo.faces_matplot
-    vertices =cubo.vertices_matplot
-    centro = cubo.centro
+    faces_cubo = cubo.faces_matplot
+    vertices = cubo.vertices_matplot
 
     ax.scatter3D(vertices[:, 0], vertices[:, 1], vertices[:, 2])
-    ax.scatter3D(*centro)
+
 
     ax.add_collection3d(Poly3DCollection(faces_cubo, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
 

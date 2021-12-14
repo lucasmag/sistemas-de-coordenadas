@@ -2,10 +2,10 @@ from math import pi
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from cubo_1a import Cubo
-from paralelepipedo_1b import Paralelepipedo
-from piramide_1c import Piramide
-from tronco_1d import Tronco
+from solidos.cubo import Cubo
+from solidos.paralelepipedo import Paralelepipedo
+from solidos.piramide import Piramide
+from solidos.tronco import Tronco
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -15,10 +15,10 @@ plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
 
 mundo = {
     "translacao":{
-        "cubo": (5, 2, 0),
-        "paralelepipedo": (-1.5, 0, 0),
-        "piramide": (2, 2, 0),
-        "tronco": (-5.5, 0, 0)
+        "cubo": (4, 2, 0),
+        "paralelepipedo": (-2, 0.5, 0),
+        "piramide": (1.5, 2, 0),
+        "tronco": (-5.5, 1, 0)
     },
     "rotacao": {
         "piramide": pi/4
@@ -31,11 +31,14 @@ PIRAMIDE = Piramide(translacao=mundo["translacao"]["piramide"], rotacao=mundo["r
 TRONCO = Tronco(translacao=mundo["translacao"]["tronco"])
 
 
-def criar_universo():
-    ax.add_collection3d(Poly3DCollection(CUBO.faces_matplot, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
-    ax.add_collection3d(Poly3DCollection(PARALELEPIPEDO.faces_matplot, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
-    ax.add_collection3d(Poly3DCollection(PIRAMIDE.faces_matplot, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
-    ax.add_collection3d(Poly3DCollection(TRONCO.faces_matplot, facecolors="cyan", linewidths=1, edgecolors="r", alpha=0.25))
+def criar_mundo():
+    cubo = Poly3DCollection(CUBO.faces_matplot, facecolors='g', linewidths=1, edgecolors='black', alpha=.3)
+    paralel = Poly3DCollection(PARALELEPIPEDO.faces_matplot, facecolors='b', linewidths=1, edgecolors='black', alpha=.3)
+    piramide = Poly3DCollection(PIRAMIDE.faces_matplot, facecolors='g', linewidths=1, edgecolors='black', alpha=.3)
+    tronco = Poly3DCollection(TRONCO.faces_matplot, facecolors='b', linewidths=1, edgecolors="black", alpha=.3)
+
+    for solido in [cubo, paralel, piramide, tronco]:
+        ax.add_collection3d(solido)
 
     plt.setp(ax.get_xticklabels(), rotation=45, va="bottom", ha="center")
     ax.view_init(elev=25., azim=280)
@@ -47,4 +50,4 @@ def criar_universo():
 
 
 if __name__ == '__main__':
-    criar_universo()
+    criar_mundo()

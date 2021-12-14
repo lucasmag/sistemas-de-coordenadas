@@ -1,10 +1,70 @@
-from math import cos, sin
+from functools import reduce
+from math import cos, sin, atan2, pi, hypot
+from operator import truediv, add
+from statistics import mean
+from typing import List, Tuple
+
 import numpy as np
+
+class BaseCamera:
+    n: List
+    u: List
+    v: List
+    txr: List
+
+    def __init__(self, eye: List, at: List):
+        n = np.divide(np.subtract(at, eye), abs(np.subtract(at, eye)))
+        # checa se divide por 0
+        self.n = self.normalizar(n)
+
+        aux = self.gerar_vetor_aux()
+        aux_normalizado = self.normalizar(aux)
+
+        # Cria vetores u e v
+        u = np.cross(self.n, aux_normalizado)
+        self.u = self.normalizar(u)
+
+        v = np.cross(self.u, self.n)
+        self.v = self.normalizar(v)
+
+        self.txr = np.matmul(self.matriz_r, self.matriz_t(eye))
+
+    def normalizar(self, vetor):
+        vetor_normalizado = np.divide(vetor, abs(np.array(vetor)))
+        return list(map(lambda i: 0 if np.isnan(i) else int(i), vetor_normalizado))
+
+    def gerar_vetor_aux(self):
+        return list(map(lambda num: 1 + int(num * 5), np.random.rand(3, 1)))
+
+    @property
+    def base(self):
+        return self.u[::-1], self.v, self.n
+
+    def matriz_t(self, camera):
+        return [
+            [1, 0, 0, -camera[0]],
+            [0, 1, 0, -camera[1]],
+            [0, 0, 1, -camera[2]],
+            [0, 0, 0, 1],
+        ]
+
+    @property
+    def matriz_r(self):
+        return [
+            [self.u[0], self.u[1], self.u[2], 0],
+            [self.n[0], self.n[1], self.n[2], 0],
+            [self.v[0], self.v[1], self.v[2], 0],
+            [0, 0, 0, 1],
+        ]
+
+    def transformar_vertice_camera(self, vertice):
+        return np.matmul(self.txr, vertice + (1,))[0:3]
 
 
 class Solido:
-    _vertices = []
-    _faces = []
+    _vertices: List[List]
+    _faces: Tuple[Tuple]
+    arestas: Tuple[Tuple]
 
     def __init__(self, translacao=(0, 0, 0), rotacao=0):
         if rotacao:
@@ -65,3 +125,47 @@ class Solido:
         centro_z = (max(todos_os_z) + min(todos_os_z)) / 2
 
         return centro_x, centro_y, centro_z
+
+    def mudar_para_camera(self, camera: BaseCamera):
+        vertices_solido_na_camera = []
+
+        for vertice in self.vertices_opengl:
+            novo_vertice = camera.transformar_vertice_camera(vertice)
+            vertices_solido_na_camera.append(novo_vertice)
+
+        self._vertices = vertices_solido_na_camera
+        return vertices_solido_na_camera
+
+    def projecao_ortogonal(self, eixo):
+        media_eixo = mean(map(lambda v: v[eixo], self._vertices))
+
+        for vertice in self._vertices:
+            vertice[eixo] = media_eixo
+
+        self._vertices = [list(tupl) for tupl in {tuple(item) for item in self._vertices}]
+
+        centro = (
+            sum([p[0] for p in self._vertices])/len(self._vertices),
+            sum([p[2] for p in self._vertices])/len(self._vertices)
+        )
+
+        self._vertices.sort(key=lambda p: atan2(p[2]-centro[1], p[0]-centro[0]))
+
+        novas_arestas = []
+        for i in range(len(self._vertices)-1):
+            novas_arestas.append([i, i+1])
+
+        novas_arestas.append([len(self._vertices)-1, 0])
+        self.arestas = novas_arestas
+        print(self._vertices)
+
+
+def ponto_medio_solidos(solidos: List[Solido]):
+    centros_solidos = map(lambda s: s.centro, solidos)
+    lista_x, lista_y, lista_z = tuple(zip(*centros_solidos))
+
+    media_x = round(mean(lista_x), 2)
+    media_y = round(mean(lista_y), 2)
+    media_z = round(mean(lista_z), 2)
+
+    return media_x, media_y, media_z

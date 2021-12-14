@@ -7,8 +7,9 @@ from utils import Solido
 
 class Piramide(Solido):
 
-    _vertices = np.array([[-1, -1, 0], [1, -1, 0], [1, 1, 0],  [-1, 1, 0], [0, 0, 3]])
-    _faces = ((0, 1, 4), (0, 3, 4), (2, 1, 4), (2, 3, 4), (0, 1, 2, 3),)
+    _vertices = [[-1, -1, 0], [1, -1, 0], [1, 1, 0],  [-1, 1, 0], [0, 0, 3]]
+    arestas = ((0, 1), (1, 2), (2, 3), (3, 0), (0, 4), (1, 4), (2, 4), (3, 4))
+    _faces = [[0, 1, 4], [0, 3, 4], [2, 1, 4], [2, 3, 4], [0, 1, 2, 3], ]
 
     def __init__(cls, translacao=(0, 0, 0), rotacao=0):
         super().__init__(translacao, rotacao)
@@ -24,10 +25,8 @@ if __name__ == '__main__':
     piramide = Piramide(rotacao=pi/4)
     faces = piramide.faces_matplot
     vertices = piramide.vertices_matplot
-    centro = piramide.centro
 
     ax.scatter3D(vertices[:, 0], vertices[:, 1], vertices[:, 2])
-    ax.scatter3D(*centro)
 
     ax.add_collection3d(Poly3DCollection(faces, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
 
