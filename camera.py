@@ -6,39 +6,13 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-from mundo import CUBO, PARALELEPIPEDO, PIRAMIDE, TRONCO
+from mundo import PARALELEPIPEDO, TRONCO
 from utils import ponto_medio_solidos, BaseCamera
 
 ORIGEM = [0, 0, 0]
-
-colors = (
-    (1, 1, 1),
-    (0, 1, 0),
-    (0, 0, 1),
-    (0, 1, 0),
-    (0, 0, 1),
-    (1, 0, 1),
-    (0, 1, 0),
-    (1, 0, 1),
-    (0, 1, 0),
-    (0, 0, 1),
-)
-
-normals = [
-    (0,  0, -1),
-    (-1, 0,  0),
-    (0,  0,  1),
-    (1,  0,  0),
-    (0,  1,  0),
-    (0, -1,  0),
-]
-
-X = ((-10, 0, 0), (10, 0, 0))
-Y = ((0, -10, 0), (0, 10, 0))
-Z = ((0, 0, -10), (0, 0, 10))
+CORES = [[0.2, 0.75, 0.33], [0.1, 0.4, 0.8]]  # verde e azul
 
 ligar_arestas = ((0, 1),)
-
 
 def desenhar_eixo(eixo):
     glBegin(GL_LINES)
@@ -82,7 +56,7 @@ def desenhar_camera(camera):
     desenhar_ponto((0, 0, 0), [1, 1, 1], 20)
 
 
-def desenhar_ponto(ponto: Tuple[float], cor, tamanho=10):
+def desenhar_ponto(ponto: Tuple, cor, tamanho=10):
     glEnable(GL_POINT_SMOOTH)
     glPointSize(tamanho)
     glColor3d(*cor)
@@ -91,15 +65,14 @@ def desenhar_ponto(ponto: Tuple[float], cor, tamanho=10):
     glEnd()
 
 
-def desenhar_solido(solido):
+def desenhar_solido(solido, cor):
     vertices = solido.vertices_opengl
     faces = solido.faces_opengl
 
     glBegin(GL_QUADS)
-    # glColor3f(0.2, 0.8, 0.5)
+    glColor3d(*cor)
     for i_surface, surface in enumerate(faces):
         i = 0
-        # glNormal3fv(normals[i_surface])
         for vertex in surface:
             i += 1
             glVertex3fv(vertices[vertex])
@@ -119,17 +92,13 @@ def desenhar_linhas_solido(solido, cor):
     glEnd()
 
 
-def main():
+def criar_camera(somente_arestas=False, visao_ortogonal=False, terceira_pessoa=False):
     pg.init()
     display = (1200, 900)
     pg.display.set_mode(display, DOUBLEBUF | OPENGL)
-    # glMatrixMode(GL_PROJECTION)
-    # glLoadIdentity()
-    # glOrtho(0.0, 1200, 900, 0.0, 0.0, 1.0)
+
     glClearColor(0.8, 0.8, 0.8, 1)
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-    # glTranslatef(0, 0, -5)
-    # gluLookAt(10, -15, 15, 0, 0, 0, 0, 0, 1)
 
     # Calculando at
     x, y, z = ponto_medio_solidos([PARALELEPIPEDO, TRONCO])
@@ -141,19 +110,19 @@ def main():
     TRONCO.mudar_para_camera(camera)
     PARALELEPIPEDO.mudar_para_camera(camera)
 
-    TRONCO.projecao_ortogonal(1)
-    PARALELEPIPEDO.projecao_ortogonal(1)
+    if visao_ortogonal:
+        TRONCO.projecao_ortogonal(1)
+        PARALELEPIPEDO.projecao_ortogonal(1)
 
-    # Gerando visualizacao a partir no novo sistema de coordenadas da camera
+    # novo sistema de coordenadas da camera
     u, v, n = camera.base
-    print(camera.base)
 
-    x, y, z = ponto_medio_solidos([PARALELEPIPEDO, TRONCO])
-    at = (x, y, z)
-    print(at)
-    # up = (0, 0, 1)
-    # glFrustum(-5, 5, -5, 5, 8, 12)
-    gluLookAt(*ORIGEM, *n, *u)
+    if terceira_pessoa:
+        # Posicionaando camera na terceira pessoa
+        gluLookAt(-8, -8, 0, *at, *u)
+    else:
+        # Posicionaando camera na origem com novo sistema de coordenadas
+        gluLookAt(*ORIGEM, *n, *u)
 
     while True:
         for event in pg.event.get():
@@ -161,25 +130,19 @@ def main():
                 pg.quit()
                 quit()
 
-        # glRotatef(1, 1, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        for solido, cor in zip([TRONCO, PARALELEPIPEDO], [[0.2, 0.75, 0.33], [0.1, 0.4, 0.8]]):
-            # desenhar_solido(solido)
-            desenhar_linhas_solido(solido, cor)
+        for solido, cor in zip([TRONCO, PARALELEPIPEDO], CORES):
+            if not somente_arestas and not visao_ortogonal:
+                desenhar_solido(solido, cor)
+            desenhar_linhas_solido(solido, (0, 0, 0) if not visao_ortogonal and not somente_arestas else cor)
 
-        # for eixo in [X, Y, Z]:
-        #     desenhar_eixo(eixo)
-
-        # desenhar_camera(camera)
-        # pontos_eixos()
-        # desenhar_ponto(at, (0, 0, 0))
-
-        # desenhar_ponto(eye)
+        if terceira_pessoa:
+            desenhar_camera(camera)
 
         pg.display.flip()
         pg.time.wait(20)
 
 
 if __name__ == "__main__":
-    main()
+    criar_camera()

@@ -9,9 +9,13 @@ from solidos.tronco import Tronco
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-# ax.set_proj_type('ortho')
-
 plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
+plt.setp(ax.get_xticklabels(), rotation=45, va="bottom", ha="center")
+ax.set_box_aspect((1.0, 1.0, 1.0))
+ax.view_init(elev=25., azim=280)
+ax.set_zlim(0, 15)
+plt.xlim([-8, 7])
+plt.ylim([-7, 8])
 
 mundo = {
     "translacao":{
@@ -34,17 +38,11 @@ TRONCO = Tronco(translacao=mundo["translacao"]["tronco"])
 def criar_mundo():
     cubo = Poly3DCollection(CUBO.faces_matplot, facecolors='g', linewidths=1, edgecolors='black', alpha=.3)
     paralel = Poly3DCollection(PARALELEPIPEDO.faces_matplot, facecolors='b', linewidths=1, edgecolors='black', alpha=.3)
-    piramide = Poly3DCollection(PIRAMIDE.faces_matplot, facecolors='g', linewidths=1, edgecolors='black', alpha=.3)
-    tronco = Poly3DCollection(TRONCO.faces_matplot, facecolors='b', linewidths=1, edgecolors="black", alpha=.3)
+    piramide = Poly3DCollection(PIRAMIDE.faces_matplot, facecolors='r', linewidths=1, edgecolors='black', alpha=.3)
+    tronco = Poly3DCollection(TRONCO.faces_matplot, facecolors='y', linewidths=1, edgecolors="black", alpha=.3)
 
     for solido in [cubo, paralel, piramide, tronco]:
         ax.add_collection3d(solido)
-
-    plt.setp(ax.get_xticklabels(), rotation=45, va="bottom", ha="center")
-    ax.view_init(elev=25., azim=280)
-    ax.set_zlim(0, 15)
-    plt.xlim([-8, 7])
-    plt.ylim([-7, 8])
 
     plt.show()
 
