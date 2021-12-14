@@ -163,7 +163,6 @@ class Solido:
         novas_arestas.append([len(self._vertices)-1, 0])
 
         self.arestas = novas_arestas
-        print(self._vertices)
 
 
 def ponto_medio_solidos(solidos: List[Solido]):

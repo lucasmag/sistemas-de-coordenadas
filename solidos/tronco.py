@@ -59,5 +59,5 @@ def criar_tronco():
     vertices = tronco.vertices_matplot
 
     ax.scatter3D(vertices[:, 0], vertices[:, 1], vertices[:, 2])
-    ax.add_collection3d(Poly3DCollection(faces, facecolors="y", linewidths=1, edgecolors="r", alpha=0.25))
+    ax.add_collection3d(Poly3DCollection(faces, facecolors="y", linewidths=1, edgecolors="black", alpha=0.25))
     plt.show()
