@@ -108,7 +108,7 @@ def criar_camera(somente_arestas=False, visao_ortogonal=False, terceira_pessoa=F
     # Calculando at
     x, y, z = ponto_medio_solidos([PARALELEPIPEDO, TRONCO])
     at = (x, y, z)
-    eye = (x, -12, z)  # ponto escolhido em outro quadrante (-2.62, -12, 1.25)
+    eye = (x, -12, z)  # ponto escolhido em outro quadrante (-2, -12, 1)
 
     camera = BaseCamera(eye, at)
 
