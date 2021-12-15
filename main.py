@@ -42,7 +42,8 @@ def main():
     elif args.camera:
         criar_camera(args.so_arestas, args.ortogonal, args.terceira_pessoa)
     else:
-        print("Opção não reconhecida")
+        # default
+        criar_mundo()
 
 
 if __name__ == "__main__":
