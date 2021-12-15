@@ -3,17 +3,6 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from utils import Solido
 
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.set_box_aspect((1.0, 1.0, 1.0))
-plt.setp(ax.get_xticklabels(), rotation=30, va="bottom", ha="center")
-plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
-
-ax.set_zlim(0, 5)
-plt.xlim([0, 5])
-plt.ylim([0, 5])
-
-
 class Paralelepipedo(Solido):
 
     def __init__(cls, translacao=(0, 0, 0)):
@@ -56,6 +45,17 @@ class Paralelepipedo(Solido):
 
 
 def criar_paralelepipedo():
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_box_aspect((1.0, 1.0, 1.0))
+    plt.setp(ax.get_xticklabels(), rotation=30, va="bottom", ha="center")
+    plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
+
+    ax.set_zlim(0, 5)
+    plt.xlim([0, 5])
+    plt.ylim([0, 5])
+
+
     paralelepipedo = Paralelepipedo()
     faces = paralelepipedo.faces_matplot
     vertices = paralelepipedo.vertices_matplot
