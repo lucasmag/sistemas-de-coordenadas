@@ -5,10 +5,12 @@ from OpenGL.GL import glBegin, glEnd
 from OpenGL.raw.GL.VERSION.GL_1_0 import GL_LINES, glVertex3fv, glEnable, glPointSize, GL_POINT_SMOOTH, GL_POINTS, \
     glColor3d, glVertex3d, GL_QUADS, glLineWidth, glClearColor, glClear, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT
 from OpenGL.raw.GLU import gluPerspective, gluLookAt
+from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from pygame import DOUBLEBUF
 from pygame.constants import OPENGL
 
-from mundo import PARALELEPIPEDO, TRONCO
+from mundo import PARALELEPIPEDO, TRONCO, PIRAMIDE, CUBO
 from utils import ponto_medio_solidos, BaseCamera
 
 ORIGEM = [0, 0, 0]
@@ -106,7 +108,7 @@ def criar_camera(somente_arestas=False, visao_ortogonal=False, terceira_pessoa=F
     # Calculando at
     x, y, z = ponto_medio_solidos([PARALELEPIPEDO, TRONCO])
     at = (x, y, z)
-    eye = (x, -12, z)  # ponto escolhido em outro quadrante
+    eye = (x, -12, z)  # ponto escolhido em outro quadrante (-2.62, -12, 1.25)
 
     camera = BaseCamera(eye, at)
 
@@ -147,5 +149,43 @@ def criar_camera(somente_arestas=False, visao_ortogonal=False, terceira_pessoa=F
         pg.time.wait(20)
 
 
+def mostrar_matplot(solidos):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
+    plt.setp(ax.get_xticklabels(), rotation=45, va="bottom", ha="center")
+    ax.set_box_aspect((1.0, 1.0, 1.0))
+    ax.view_init(elev=25., azim=280)
+    ax.set_zlim(-10, 10)
+    plt.xlim([-10, 10])
+    plt.ylim([0, 20])
+
+    x, y, z = ponto_medio_solidos(solidos)
+    at = (x, y, z)
+
+    eye = (x, -12, z)  # ponto escolhido em outro quadrante
+    print(eye)
+    camera = BaseCamera(eye, at)
+
+    for solido in solidos:
+        solido.mudar_para_camera(camera)
+
+    cubo = Poly3DCollection(solidos[0].faces_matplot, facecolors='g', linewidths=1, edgecolors='black', alpha=.3)
+    paralel = Poly3DCollection(solidos[1].faces_matplot, facecolors='b', linewidths=1, edgecolors='black', alpha=.3)
+    piramide = Poly3DCollection(solidos[2].faces_matplot, facecolors='r', linewidths=1, edgecolors='black', alpha=.3)
+    tronco = Poly3DCollection(solidos[3].faces_matplot, facecolors='y', linewidths=1, edgecolors="black", alpha=.3)
+
+    u, v, n = camera.base
+    ax.scatter3D(*u)
+    ax.scatter3D(*v)
+    ax.scatter3D(*n)
+    ax.scatter3D(*ORIGEM)
+
+    for solido in [cubo, paralel, piramide, tronco]:
+        ax.add_collection3d(solido)
+
+    plt.show()
+
+
 if __name__ == "__main__":
-    criar_camera()
+    mostrar_matplot([CUBO, PARALELEPIPEDO, PIRAMIDE, TRONCO])
