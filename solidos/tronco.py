@@ -53,7 +53,6 @@ def criar_tronco():
     plt.xlim([0, 3])
     plt.ylim([0, 3])
 
-
     tronco = Tronco()
     faces = tronco.faces_matplot
     vertices = tronco.vertices_matplot

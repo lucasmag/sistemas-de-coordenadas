@@ -55,7 +55,6 @@ def criar_paralelepipedo():
     plt.xlim([0, 5])
     plt.ylim([0, 5])
 
-
     paralelepipedo = Paralelepipedo()
     faces = paralelepipedo.faces_matplot
     vertices = paralelepipedo.vertices_matplot

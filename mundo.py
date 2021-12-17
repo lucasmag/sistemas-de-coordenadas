@@ -8,7 +8,7 @@ from solidos.piramide import Piramide
 from solidos.tronco import Tronco
 
 mundo = {
-    "translacao":{
+    "translacao": {
         "cubo": (4, 2, 0),
         "paralelepipedo": (-2, 0.5, 0),
         "piramide": (1.5, 2, 0),

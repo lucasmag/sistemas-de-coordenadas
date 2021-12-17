@@ -10,7 +10,7 @@ class Piramide(Solido):
     arestas = ((0, 1), (1, 2), (2, 3), (3, 0), (0, 4), (1, 4), (2, 4), (3, 4))
     _faces = [[0, 1, 4], [0, 3, 4], [2, 1, 4], [2, 3, 4], [0, 1, 2, 3], ]
 
-    def __init__(cls, translacao=(0, 0, 0), rotacao=0):
+    def __init__(cls, translacao=(0, 0, 0), rotacao=0.0):
         super().__init__(translacao, rotacao)
 
 

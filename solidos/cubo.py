@@ -54,7 +54,6 @@ def criar_cubo():
     plt.xlim([-1, 1])
     plt.ylim([-1, 1])
 
-
     cubo = Cubo()
     faces_cubo = cubo.faces_matplot
     vertices = cubo.vertices_matplot

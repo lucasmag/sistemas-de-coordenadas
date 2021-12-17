@@ -68,7 +68,7 @@ class Solido:
     _faces: Tuple[Tuple]
     arestas: Tuple[Tuple]
 
-    def __init__(self, translacao=(0, 0, 0), rotacao=0):
+    def __init__(self, translacao=(0, 0, 0), rotacao=0.0):
         if rotacao:
             self.rotacionar(rotacao)
 
