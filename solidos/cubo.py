@@ -3,14 +3,17 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from utils import Solido
 
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-plt.setp(ax.get_xticklabels(), rotation=30, va="bottom", ha="center")
-plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
-ax.set_box_aspect((1.0, 1.0, 1.0))
-ax.set_zlim(0, 2)
-plt.xlim([-1, 1])
-plt.ylim([-1, 1])
+def montar_ambiente():
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    plt.setp(ax.get_xticklabels(), rotation=30, va="bottom", ha="center")
+    plt.setp(ax.get_yticklabels(), rotation=-20, va="bottom", ha="center")
+    ax.set_box_aspect((1.0, 1.0, 1.0))
+    ax.set_zlim(0, 2)
+    plt.xlim([-1, 1])
+    plt.ylim([-1, 1])
+
+    return ax
 
 
 class Cubo(Solido):
@@ -55,6 +58,7 @@ class Cubo(Solido):
 
 
 def criar_cubo():
+    ax = montar_ambiente()
     cubo = Cubo()
     faces_cubo = cubo.faces_matplot
     vertices = cubo.vertices_matplot
